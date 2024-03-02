@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.daggerHilt)
     alias(libs.plugins.kotlinKapt)
+    id("com.google.gms.google-services")
 
 }
 
@@ -68,6 +69,7 @@ dependencies {
 
     implementation (libs.dagger)
     implementation (libs.hilt.android.v248)
+    implementation(libs.firebase.firestore)
     annotationProcessor(libs.hilt.compiler)
 
     // Coroutines
