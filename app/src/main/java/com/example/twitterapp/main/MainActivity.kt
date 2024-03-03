@@ -1,4 +1,4 @@
-package com.example.twitterapp
+package com.example.twitterapp.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,39 +18,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.twitterapp.screens.LoginSignupScreen
 import com.example.twitterapp.ui.theme.TwitterAppTheme
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Column {
-                ListItem()
-            }
+            LoginSignupScreen(context = this)
         }
     }
 }
 
-@Preview(showBackground = true, widthDp = 300, heightDp = 300)
-@Composable
-private fun ListItem(){
-
-    val list = mutableListOf("One","Two","Three","Four","One","Two","Three","Four")
-
-    LazyColumn(content =  {
-
-        items(list){ item ->
-            Row {
-                Image(painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = "")
-                Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = item)
-                    Text(text = "Una")
-                }
-
-            }
-        }
-
-    })
-
-
-}
