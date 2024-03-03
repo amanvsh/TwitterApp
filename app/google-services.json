@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "904774748613",
+    "project_id": "twitterapp-15959",
+    "storage_bucket": "twitterapp-15959.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904774748613:android:efc4d26d788460374ce3ac",
+        "android_client_info": {
+          "package_name": "com.example.twitterapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLcWVRF3-gazj_-CF_vLVEs3M68p45yr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
