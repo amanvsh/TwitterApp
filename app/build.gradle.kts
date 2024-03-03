@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -70,7 +71,7 @@ dependencies {
     implementation (libs.dagger)
     implementation (libs.hilt.android.v248)
     implementation(libs.firebase.firestore)
-    annotationProcessor(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
@@ -82,12 +83,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.adapter.rxjava2)
-    implementation(libs.gson)
-    implementation(libs.converter.gson)
+    // Firebase
+    implementation(libs.firebase.auth)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
