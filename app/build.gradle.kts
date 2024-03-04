@@ -68,10 +68,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    //Hilt
     implementation (libs.dagger)
     implementation (libs.hilt.android.v248)
-    implementation(libs.firebase.firestore)
     kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
@@ -84,7 +85,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // Firebase
+    implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(platform(libs.firebase.bom))
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
