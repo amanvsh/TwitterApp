@@ -3,26 +3,18 @@ package com.example.twitterapp.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.twitterapp.main.NavigationKeys.Arg.USER_EMAIL_ID
+import com.example.twitterapp.screens.ComposeTweet
 import com.example.twitterapp.screens.LoginSignupScreen
-import com.example.twitterapp.ui.theme.TwitterAppTheme
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.twitterapp.screens.TimeLineScreen
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,8 +22,54 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoginSignupScreen(context = this)
+            TwitterApp()
         }
     }
 }
+
+@Composable
+private fun  TwitterApp() {
+    val navController = rememberNavController()
+    val context = LocalContext.current
+    var mEmailId = ""
+    NavHost(navController, startDestination = NavigationKeys.Route.LOGIN_SIGNUP_SCREEN) {
+        composable(route = NavigationKeys.Route.LOGIN_SIGNUP_SCREEN) {
+            LoginSignupScreen(
+                context = context
+            ) { emailId ->
+                mEmailId = emailId
+                navController.navigate("${NavigationKeys.Route.TIME_LINE_SCREEN}/$emailId")
+            }
+        }
+        composable(
+            route = "${NavigationKeys.Route.TIME_LINE_SCREEN}/{${USER_EMAIL_ID}}",
+            arguments = listOf(navArgument(USER_EMAIL_ID) {
+                type = NavType.StringType
+            })
+        ) { navBackStackEntry ->
+            val emailID = navBackStackEntry.arguments?.getString(USER_EMAIL_ID)
+            TimeLineScreen(emailID, navController)
+        }
+
+        composable(route = NavigationKeys.Route.POST_TWEET_SCREEN) {
+            ComposeTweet(context = context, email =  mEmailId, navHostController = navController)
+        }
+    }
+}
+
+
+object NavigationKeys {
+    object Arg {
+        const val USER_EMAIL_ID = "email_id"
+    }
+
+    object Route {
+
+        const val LOGIN_SIGNUP_SCREEN = "login_signup"
+        const val TIME_LINE_SCREEN = "time_line"
+        const val POST_TWEET_SCREEN = "post_tweet"
+    }
+
+}
+
 

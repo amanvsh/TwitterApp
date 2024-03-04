@@ -1,16 +1,11 @@
 package com.example.twitterapp.repository
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class TwitterRepository @Inject constructor(private val firebaseAuth: FirebaseAuth) {
+class UserRepository @Inject constructor() {
 
     suspend fun signUpUser(email: String, password: String): String{
         Log.v("FireBaseTest","signUpUser called")
@@ -31,9 +26,9 @@ class TwitterRepository @Inject constructor(private val firebaseAuth: FirebaseAu
         return try {
             val result =  FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
             val user = result.user
-            "SignIn successfully"
+            "Login successfully"
         } catch (e: Exception) {
-            e.localizedMessage ?: "SignIn Failed"
+            e.localizedMessage ?: "Login Failed"
         }
     }
 
