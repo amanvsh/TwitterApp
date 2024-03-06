@@ -71,6 +71,8 @@ dependencies {
     //Hilt
     implementation (libs.dagger)
     implementation (libs.hilt.android.v248)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.junit.ktx)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -88,6 +90,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(platform(libs.firebase.bom))
+
+    implementation(libs.coil.compose)
 
 
     testImplementation(libs.junit)
