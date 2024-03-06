@@ -3,56 +3,64 @@ package com.example.twitterapp.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavType
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.example.twitterapp.main.NavigationKeys.Arg.USER_EMAIL_ID
 import com.example.twitterapp.screens.ComposeTweet
 import com.example.twitterapp.screens.LoginSignupScreen
 import com.example.twitterapp.screens.TimeLineScreen
+import com.example.twitterapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private var mEmailId: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
-            TwitterApp()
+            val userViewModel: UserViewModel = hiltViewModel()
+            if (userViewModel.isUserLoggedIn().isNullOrEmpty()) {
+                TwitterApp(null, NavigationKeys.Route.LOGIN_SIGNUP_SCREEN)
+            }else{
+                TwitterApp(
+                    loginEmailId = userViewModel.isUserLoggedIn(),
+                    NavigationKeys.Route.TIME_LINE_SCREEN
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun  TwitterApp() {
+private fun  TwitterApp(loginEmailId: String?, launchScreen: String) {
+    var emailId = loginEmailId
     val navController = rememberNavController()
     val context = LocalContext.current
-    var mEmailId = ""
-    NavHost(navController, startDestination = NavigationKeys.Route.LOGIN_SIGNUP_SCREEN) {
+    NavHost(navController, startDestination = launchScreen) {
+
         composable(route = NavigationKeys.Route.LOGIN_SIGNUP_SCREEN) {
-            LoginSignupScreen(
-                context = context
-            ) { emailId ->
-                mEmailId = emailId
-                navController.navigate("${NavigationKeys.Route.TIME_LINE_SCREEN}/$emailId")
+            LoginSignupScreen{
+                emailId = it
+                navController.navigate(route = NavigationKeys.Route.TIME_LINE_SCREEN){
+                    popUpTo(NavigationKeys.Route.LOGIN_SIGNUP_SCREEN){ run { inclusive = true } }
+                }
             }
         }
         composable(
-            route = "${NavigationKeys.Route.TIME_LINE_SCREEN}/{${USER_EMAIL_ID}}",
-            arguments = listOf(navArgument(USER_EMAIL_ID) {
-                type = NavType.StringType
-            })
-        ) { navBackStackEntry ->
-            val emailID = navBackStackEntry.arguments?.getString(USER_EMAIL_ID)
-            TimeLineScreen(emailID, navController)
+            route = NavigationKeys.Route.TIME_LINE_SCREEN
+        ) {
+            TimeLineScreen(emailID = emailId, navController = navController)
         }
 
         composable(route = NavigationKeys.Route.POST_TWEET_SCREEN) {
-            ComposeTweet(context = context, email =  mEmailId, navHostController = navController)
+            ComposeTweet(email =  emailId, navHostController = navController)
         }
     }
 }
